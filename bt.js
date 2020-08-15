@@ -1,4 +1,4 @@
-// ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ Г±Г±Г»Г«Г®ГЄ Г­Г  ГЅГ«ГҐГ¬ГҐГ­ГІГ» UI
+// Получение ссылок на элементы UI
 let connectButton = document.getElementById('connect');
 let connect2Button = document.getElementById('connect2');
 let disconnectButton = document.getElementById('disconnect');
@@ -6,7 +6,7 @@ let terminalContainer = document.getElementById('terminal');
 let sendForm = document.getElementById('send-form');
 let inputField = document.getElementById('input');
 
-// ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЄ ГіГ±ГІГ°Г®Г©Г±ГІГўГі ГЇГ°ГЁ Г­Г Г¦Г ГІГЁГЁ Г­Г  ГЄГ­Г®ГЇГЄГі Connect
+// Подключение к устройству при нажатии на кнопку Connect
 connectButton.addEventListener('click', function() {
   connect();
 });
@@ -14,23 +14,23 @@ connect2Button.addEventListener('click', function() {
   connect_cc2541();
 });
 
-// ГЋГІГЄГ«ГѕГ·ГҐГ­ГЁГҐ Г®ГІ ГіГ±ГІГ°Г®Г©Г±ГІГўГ  ГЇГ°ГЁ Г­Г Г¦Г ГІГЁГЁ Г­Г  ГЄГ­Г®ГЇГЄГі Disconnect
+// Отключение от устройства при нажатии на кнопку Disconnect
 disconnectButton.addEventListener('click', function() {
   disconnect();
 });
 
-// ГЋГЎГ°Г ГЎГ®ГІГЄГ  Г±Г®ГЎГ»ГІГЁГї Г®ГІГЇГ°Г ГўГЄГЁ ГґГ®Г°Г¬Г»
+// Обработка события отправки формы
 sendForm.addEventListener('submit', function(event) {
-  event.preventDefault(); // ГЏГ°ГҐГ¤Г®ГІГўГ°Г ГІГЁГІГј Г®ГІГЇГ°Г ГўГЄГі ГґГ®Г°Г¬Г»
-  send(inputField.value); // ГЋГІГЇГ°Г ГўГЁГІГј Г±Г®Г¤ГҐГ°Г¦ГЁГ¬Г®ГҐ ГІГҐГЄГ±ГІГ®ГўГ®ГЈГ® ГЇГ®Г«Гї
-  inputField.value = '';  // ГЋГЎГ­ГіГ«ГЁГІГј ГІГҐГЄГ±ГІГ®ГўГ®ГҐ ГЇГ®Г«ГҐ
-  inputField.focus();     // Г‚ГҐГ°Г­ГіГІГј ГґГ®ГЄГіГ± Г­Г  ГІГҐГЄГ±ГІГ®ГўГ®ГҐ ГЇГ®Г«ГҐ
+  event.preventDefault(); // Предотвратить отправку формы
+  send(inputField.value); // Отправить содержимое текстового поля
+  inputField.value = '';  // Обнулить текстовое поле
+  inputField.focus();     // Вернуть фокус на текстовое поле
 });
 
-// ГЉГЅГё Г®ГЎГєГҐГЄГІГ  ГўГ»ГЎГ°Г Г­Г­Г®ГЈГ® ГіГ±ГІГ°Г®Г©Г±ГІГўГ 
+// Кэш объекта выбранного устройства
 let deviceCache = null;
 
-// Г‡Г ГЇГіГ±ГІГЁГІГј ГўГ»ГЎГ®Г° Bluetooth ГіГ±ГІГ°Г®Г©Г±ГІГўГ  ГЁ ГЇГ®Г¤ГЄГ«ГѕГ·ГЁГІГјГ±Гї ГЄ ГўГ»ГЎГ°Г Г­Г­Г®Г¬Гі
+// Запустить выбор Bluetooth устройства и подключиться к выбранному
 function connect() {
   return (deviceCache ? Promise.resolve(deviceCache) :
       requestBluetoothDevice()).
@@ -46,11 +46,11 @@ function connect_cc2541() {
       catch(error => log(error));
 }
 
-// ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЄ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г®Г¬Гі ГіГ±ГІГ°Г®Г©Г±ГІГўГі, ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г±ГҐГ°ГўГЁГ±Г  ГЁ ГµГ Г°Г ГЄГІГҐГ°ГЁГ±ГІГЁГЄГЁ
+// Подключение к определенному устройству, получение сервиса и характеристики
 let characteristicCache = null;
 let characteristicWrCache = null;
 
-// ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЄ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г®Г¬Гі ГіГ±ГІГ°Г®Г©Г±ГІГўГі, ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г±ГҐГ°ГўГЁГ±Г  ГЁ ГµГ Г°Г ГЄГІГҐГ°ГЁГ±ГІГЁГЄГЁ
+// Подключение к определенному устройству, получение сервиса и характеристики
 function connectDeviceAndCacheCharacteristic(device) {
   if (device.gatt.connected && characteristicCache) {
     return Promise.resolve(characteristicCache);
@@ -110,13 +110,13 @@ function connectDeviceAndCacheCharacteristic_cc2541(device) {
         return characteristicCache;
       });
 }
-// Г‚Г»ГўГ®Г¤ Гў ГІГҐГ°Г¬ГЁГ­Г Г«
+// Вывод в терминал
 function log(data, type = '') {
   terminalContainer.insertAdjacentHTML('beforeend',
       '<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
 }
 
-// Г‡Г ГЇГ°Г®Г± ГўГ»ГЎГ®Г°Г  Bluetooth ГіГ±ГІГ°Г®Г©Г±ГІГўГ 
+// Запрос выбора Bluetooth устройства
 function requestBluetoothDevice() {
   log('Requesting bluetooth device...');
 
@@ -127,7 +127,7 @@ function requestBluetoothDevice() {
         log('"' + device.name + '" bluetooth device selected');
         deviceCache = device;
 
-        // Г„Г®ГЎГ ГўГ«ГҐГ­Г­Г Гї Г±ГІГ°Г®ГЄГ 
+        // Добавленная строка
         deviceCache.addEventListener('gattserverdisconnected',
             handleDisconnection);
 
@@ -144,7 +144,7 @@ function requestBluetoothDevice_cc2541() {
         log('"' + device.name + '" bluetooth device selected');
         deviceCache = device;
 
-        // Г„Г®ГЎГ ГўГ«ГҐГ­Г­Г Гї Г±ГІГ°Г®ГЄГ 
+        // Добавленная строка
         deviceCache.addEventListener('gattserverdisconnected',
             handleDisconnection);
 
@@ -152,7 +152,7 @@ function requestBluetoothDevice_cc2541() {
       });
 }
 
-// ГЋГЎГ°Г ГЎГ®ГІГ·ГЁГЄ Г°Г Г§ГєГҐГ¤ГЁГ­ГҐГ­ГЁГї
+// Обработчик разъединения
 function handleDisconnection(event) {
   let device = event.target;
 
@@ -163,20 +163,20 @@ function handleDisconnection(event) {
       then(characteristic => startNotifications(characteristic)).
       catch(error => log(error));
 }
-// Г‚ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЇГ®Г«ГіГ·ГҐГ­ГЁГї ГіГўГҐГ¤Г®Г¬Г«ГҐГ­ГЁГ© Г®ГЎ ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГЁ ГµГ Г°Г ГЄГІГҐГ°ГЁГ±ГІГЁГЄГЁ
+// Включение получения уведомлений об изменении характеристики
 function startNotifications(characteristic) {
   log('Starting notifications...');
 
   return characteristic.startNotifications().
       then(() => {
         log('Notifications started');
-        // Г„Г®ГЎГ ГўГ«ГҐГ­Г­Г Гї Г±ГІГ°Г®ГЄГ 
+        // Добавленная строка
         characteristic.addEventListener('characteristicvaluechanged',
             handleCharacteristicValueChanged);
       });
 }
 
-// ГЋГІГЄГ«ГѕГ·ГЁГІГјГ±Гї Г®ГІ ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­Г­Г®ГЈГ® ГіГ±ГІГ°Г®Г©Г±ГІГўГ 
+// Отключиться от подключенного устройства
 function disconnect() {
   if (deviceCache) {
     log('Disconnecting from "' + deviceCache.name + '" bluetooth device...');
@@ -193,7 +193,7 @@ function disconnect() {
     }
   }
 
-  // Г„Г®ГЎГ ГўГ«ГҐГ­Г­Г®ГҐ ГіГ±Г«Г®ГўГЁГҐ
+  // Добавленное условие
   if (characteristicCache) {
     characteristicCache.removeEventListener('characteristicvaluechanged',
         handleCharacteristicValueChanged);
@@ -203,42 +203,37 @@ function disconnect() {
   deviceCache = null;
 }
 
-// ГЏГ°Г®Г¬ГҐГ¦ГіГІГ®Г·Г­Г»Г© ГЎГіГґГҐГ° Г¤Г«Гї ГўГµГ®Г¤ГїГ№ГЁГµ Г¤Г Г­Г­Г»Гµ
+// Промежуточный буфер для входящих данных
 let readBuffer = '';
 
-// ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ Г¤Г Г­Г­Г»Гµ
+// Получение данных
 function handleCharacteristicValueChanged(event) {
-  let value = new TextDecoder().decode(event.target.value);
-
-  for (let c of value) {
-    if (c === '\n') {
-      let data = readBuffer.trim();
-      readBuffer = '';
-
-      if (data) {
-        receive(data);
-      }
-    }
-    else {
-      readBuffer += c;
-    }
+  let value = event.target.value;
+  let a = [];
+  let perc = [];
+  // Convert raw data bytes to hex values just for the sake of showing something.
+  // In the "real" world, you'd use data.getUint8, data.getUint16 or even
+  // TextDecoder to process raw data bytes.
+  for (let i = 0; i < value.byteLength; i++) {
+    a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
   }
+  receive(a);
+  perc.push('Percent: ' + ('00' + value.getUint8(7).toString(10)).slice(-2) + '%'); 
+  receive(perc);
 }
 
-// ГЋГЎГ°Г ГЎГ®ГІГЄГ  ГЇГ®Г«ГіГ·ГҐГ­Г­Г»Гµ Г¤Г Г­Г­Г»Гµ
+// Обработка полученных данных
 function receive(data) {
   log(data, 'in');
 }
 
-// ГЋГІГЇГ°Г ГўГЁГІГј Г¤Г Г­Г­Г»ГҐ ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­Г­Г®Г¬Гі ГіГ±ГІГ°Г®Г©Г±ГІГўГі
+// Отправить данные подключенному устройству
 function send(data) {
   data = String(data);
-	
+
   if (!data || !characteristicWrCache) {
     return;
   }
-
-  data += '\n';
 
   if (data.length > 20) {
     let chunks = data.match(/(.|[\r\n]){1,20}/g);
@@ -252,12 +247,12 @@ function send(data) {
     }
   }
   else {
-    writeToCharacteristic(characteristicWrCache, data);
+    writeToCharacteristic(characteristicWrCache,data);
   }
-
+  
   log(data, 'out');
 }
-// Г‡Г ГЇГЁГ±Г ГІГј Г§Г­Г Г·ГҐГ­ГЁГҐ Гў ГµГ Г°Г ГЄГІГҐГ°ГЁГ±ГІГЁГЄГі
+// Записать значение в характеристику
 function writeToCharacteristic(characteristic, data) {
-  characteristic.writeValue(new TextEncoder().encode(data));
+  characteristic.writeValue(new Uint8Array([58,7,1,4,0,-56,0,29]));
 }
